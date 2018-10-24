@@ -1,10 +1,10 @@
 use sakila;
 select first_name, last_name from actor;
-#alter table actor add column Actor_Name varchar(50);
-
+alter table actor drop column Actor_Name;
+select *, concat(first_name,'',last_name) as 'Actor Name' from actor;
 select actor_id, first_name, last_name from actor where first_name = "Joe";
-#select * from actor where last_name = "%GEN%";
-#select * from actor where last_name = "%LI%" order by last_name, first_name;
+select * from actor where last_name like "%GEN%";
+select * from actor where last_name like "%LI%" order by last_name, first_name;
 select country_id, country from country where country in ("Afganistan", "Bangladesh", "China");
 alter table actor add column Description blob;
 alter table actor drop column Description;
@@ -15,7 +15,7 @@ update actor set first_name = "GROUCHO" where first_name = "HARPO";
 show create table address;
 select first_name, last_name, address from staff inner join address using (address_id);
 show create table payment;
-#select first_name, last_name, sum(amount) from staff join payment using (staff_id) group by first_name having payment_date in ;
+select first_name, last_name, sum(amount) from staff join payment using (staff_id) where payment_date like "2005-08%" group by staff_id;
 select title, count(actor_id) from film inner join film_actor using (film_id) group by title;
 select count(inventory_id) as `Number of Copies of Hunchback Impossible` from inventory where film_id = (select film_id from film where title = "Hunchback Impossible");
 select first_name, last_name, sum(amount) from customer join payment using (customer_id) group by last_name order by last_name;
@@ -29,4 +29,5 @@ select store_id, city, country from store join address using (address_id) join c
 select category.name, sum(amount) from category join film_category using (category_id) join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by payment.rental_id order by sum(amount) desc limit 5;
 create view top_grossing_genres as
 select name, sum(amount) from category join film_category using (category_id) join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by payment.rental_id order by sum(amount) desc limit 5;
+select * from top_grossing_genres;
 drop view top_grossing_genres;
