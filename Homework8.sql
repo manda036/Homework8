@@ -1,0 +1,32 @@
+use sakila;
+select first_name, last_name from actor;
+#alter table actor add column Actor_Name varchar(50);
+
+select actor_id, first_name, last_name from actor where first_name = "Joe";
+#select * from actor where last_name = "%GEN%";
+#select * from actor where last_name = "%LI%" order by last_name, first_name;
+select country_id, country from country where country in ("Afganistan", "Bangladesh", "China");
+alter table actor add column Description blob;
+alter table actor drop column Description;
+select last_name, count(last_name) from actor group by last_name;
+select last_name, count(last_name) from actor group by last_name having count(last_name)>1;
+update actor set first_name = "HARPO" where first_name = "GROUCHO";
+update actor set first_name = "GROUCHO" where first_name = "HARPO";
+show create table address;
+select first_name, last_name, address from staff inner join address using (address_id);
+show create table payment;
+#select first_name, last_name, sum(amount) from staff join payment using (staff_id) group by first_name having payment_date in ;
+select title, count(actor_id) from film inner join film_actor using (film_id) group by title;
+select count(inventory_id) as `Number of Copies of Hunchback Impossible` from inventory where film_id = (select film_id from film where title = "Hunchback Impossible");
+select first_name, last_name, sum(amount) from customer join payment using (customer_id) group by last_name order by last_name;
+select title from film where language_id = (select language_id from language where name = "English") and title in ("K%", "Q%");
+select first_name, last_name from actor where actor_id in (select actor_id from film_actor where film_id = (select film_id from film where title = "Alone Trip"));
+select first_name, last_name, email from customer join address using (address_id) join city using (city_id) join country using (country_id) where country = "Canada";
+select title from film where film_id in (select film_id from film_category where category_id = (select category_id from category where name = "Family"));
+select title, count(rental_id) from film f join inventory i using (film_id) join rental r using (inventory_id) group by r.inventory_id order by count(rental_id) desc;
+select store_id, sum(amount) from payment join staff using (staff_id) group by store_id;
+select store_id, city, country from store join address using (address_id) join city using (city_id) join country using (country_id);
+select category.name, sum(amount) from category join film_category using (category_id) join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by payment.rental_id order by sum(amount) desc limit 5;
+create view top_grossing_genres as
+select name, sum(amount) from category join film_category using (category_id) join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by payment.rental_id order by sum(amount) desc limit 5;
+drop view top_grossing_genres;
