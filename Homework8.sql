@@ -5,7 +5,7 @@ select *, concat(first_name,'',last_name) as 'Actor Name' from actor;
 select actor_id, first_name, last_name from actor where first_name = "Joe";
 select * from actor where last_name like "%GEN%";
 select * from actor where last_name like "%LI%" order by last_name, first_name;
-select country_id, country from country where country in ("Afganistan", "Bangladesh", "China");
+select country_id, country from country where country in ("Afghanistan", "Bangladesh", "China");
 alter table actor add column Description blob;
 alter table actor drop column Description;
 select last_name, count(last_name) from actor group by last_name;
@@ -26,8 +26,8 @@ select title from film where film_id in (select film_id from film_category where
 select title, count(rental_id) from film f join inventory i using (film_id) join rental r using (inventory_id) group by r.inventory_id order by count(rental_id) desc;
 select store_id, sum(amount) from payment join staff using (staff_id) group by store_id;
 select store_id, city, country from store join address using (address_id) join city using (city_id) join country using (country_id);
-select category.name, sum(amount) from category join film_category using (category_id) join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by payment.rental_id order by sum(amount) desc limit 5;
+select category.name, sum(amount) from category join film_category using (category_id) join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by name order by sum(amount) desc limit 5;
 create view top_grossing_genres as
-select name, sum(amount) from category join film_category using (category_id) join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by payment.rental_id order by sum(amount) desc limit 5;
+select name, sum(amount) from category join film_category using (category_id) join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by name order by sum(amount) desc limit 5;
 select * from top_grossing_genres;
 drop view top_grossing_genres;
